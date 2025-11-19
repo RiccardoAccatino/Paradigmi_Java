@@ -46,6 +46,7 @@ public class Rubrica {
 			{
 				rubrica.remove(i);
 				vc=true;
+				i--;
 			}
 		}
 		return vc;
