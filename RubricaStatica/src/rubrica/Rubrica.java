@@ -25,8 +25,7 @@ public class Rubrica {
 	}
 	public static ArrayList<String> cerca(String contatto) {
 		ArrayList<String> risultati=new ArrayList<String>();
-		if(rubrica.contains(contatto))
-		{
+		
 			for(int i=0;i<rubrica.size();i++)
 			{
 				if(rubrica.get(i).contains(contatto))
@@ -35,8 +34,21 @@ public class Rubrica {
 				}
 			}
 			return risultati;
+		
+
+	}
+	public static boolean elimina(String contatto) {
+		
+		boolean vc=false;
+		for(int i=0;i<rubrica.size();i++)
+		{
+			if(rubrica.get(i).contains(contatto))
+			{
+				rubrica.remove(i);
+				vc=true;
+			}
 		}
-		return null;
+		return vc;
 	}
 	
 

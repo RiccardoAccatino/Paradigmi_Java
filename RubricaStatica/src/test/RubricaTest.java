@@ -71,5 +71,74 @@ class RubricaTest {
 		assertEquals(2,risultati.size());
 	}
 	
+	@Test
+	void testRicercaVuota()
+	{
+		ArrayList<String> risultati;
+		risultati=Rubrica.cerca("Irene");
+		assertEquals(0,risultati.size());
+	}
+	
+	@Test
+	void testRicercaPrimPos()
+	{
+		Rubrica.aggiungi("Irene=3442346219");
+		Rubrica.aggiungi("Marco=3442376518");
+		Rubrica.aggiungi("Sofia=3443366213");
+		ArrayList<String> risultati;
+		risultati=Rubrica.cerca("Irene");
+		assertEquals(1,risultati.size());
+	}
+	
+	@Test
+	void testRicercaUltimaPos()
+	{
+		Rubrica.aggiungi("Diana=3442346219");
+		Rubrica.aggiungi("Marco=3442376518");
+		Rubrica.aggiungi("Irene=3443366213");
+		ArrayList<String> risultati;
+		risultati=Rubrica.cerca("Irene");
+		assertEquals(1,risultati.size());
+	}
+	
+	@Test
+	void testEliminaSingolo()
+	{
+		Rubrica.aggiungi("Diana=3442346219");
+		Rubrica.aggiungi("Marco=3442376518");
+		Rubrica.aggiungi("Irene=3443366213");
+		assertEquals(true,Rubrica.elimina("Diana"));
+		assertEquals(2,Rubrica.numEls());
+	}
+	
+	@Test
+	void testEliminaDoppio()
+	{
+		Rubrica.aggiungi("Diana=3442346219");
+		Rubrica.aggiungi("Diana=3442376518");
+		Rubrica.aggiungi("Irene=3443366213");
+		assertEquals(true,Rubrica.elimina("Diana"));
+		assertEquals(1,Rubrica.numEls());
+	}
+	
+	@Test
+	void testEliminaTutto()
+	{
+		Rubrica.aggiungi("Diana=3442346219");
+		Rubrica.aggiungi("Diana=3442376518");
+		Rubrica.aggiungi("Diana=3443366213");
+		assertEquals(true,Rubrica.elimina("Diana"));
+		assertEquals(0,Rubrica.numEls());
+	}
+	
+	@Test
+	void testEliminaNonEsistente()
+	{
+		Rubrica.aggiungi("Diana=3442346219");
+		Rubrica.aggiungi("Diana=3442376518");
+		Rubrica.aggiungi("Irene=3443366213");
+		assertEquals(false,Rubrica.elimina("Carla"));
+		assertEquals(3,Rubrica.numEls());
+	}
 
 }
