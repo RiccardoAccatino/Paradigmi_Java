@@ -1,15 +1,75 @@
 package test;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import rubrica.Rubrica;
 
 class RubricaTest {
 
+	@BeforeEach 
+	void setup() 
+	{ 
+		Rubrica.crea(); 
+	} 
+	
+	@AfterEach 
+	void reset() 
+	{ 
+		Rubrica.svuota(); 
+	} 
+	
 	@Test 
 	void testCreazione() 
 	{ 
-		Rubrica.crea();
-		assertTrue(Rubrica.numEl()==0);
+		assertTrue(Rubrica.numEls() == 0); 
+	} 
+	@Test 
+	void testSvuota() 
+	{ 
+		Rubrica.svuota(); 
+		assertEquals(0, Rubrica.numEls()); 
 	}
+	
+	@Test
+	void testAggiungi()
+	{
+		Rubrica.aggiungi("Irene=3442346219");
+		Rubrica.aggiungi("Marco=3442376518");
+		Rubrica.aggiungi("Irene=3443366213");
+		assertEquals(3, Rubrica.numEls()); 
+	}
+	
+	@Test
+	void testAggiungiMassimo()
+	{
+		Rubrica.aggiungi("Irene=3442346219");
+		Rubrica.aggiungi("Marco=3442376518");
+		Rubrica.aggiungi("Irene=3443366213");
+		assertEquals(-1, Rubrica.aggiungi("Irene=3443366216")); 
+	}
+	
+	@Test
+	void testAggiungiDiversita()
+	{
+		Rubrica.aggiungi("Irene=3442346219");
+		Rubrica.aggiungi("Marco=3442376518");
+		assertEquals(0, Rubrica.aggiungi("Marco=3442376518"));
+	}
+	
+	@Test
+	void testRicercaNumEl()
+	{
+		Rubrica.aggiungi("Irene=3442346219");
+		Rubrica.aggiungi("Marco=3442376518");
+		Rubrica.aggiungi("Irene=3443366213");
+		ArrayList<String> risultati;
+		risultati=Rubrica.cerca("Irene");
+		assertEquals(2,risultati.size());
+	}
+	
 
 }
