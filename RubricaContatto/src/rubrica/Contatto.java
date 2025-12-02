@@ -16,7 +16,7 @@ public class Contatto {
 	
 	public Contatto(String email)
 	{
-		this.setEmail("");
+		this.setEmail(email);
 		this.setNome("");
 		numTel=new ArrayList<String>();
 	}
@@ -88,9 +88,8 @@ public class Contatto {
 		}	
 	}
 	
-	public String toString()
-	{
-		return Contatto.class.toString();
+	public String toString() {
+	    return nome + " <" + email + "> Tel: " + numTel.toString();
 	}
 
 }
