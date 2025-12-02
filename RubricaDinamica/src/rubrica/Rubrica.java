@@ -62,7 +62,6 @@ public class Rubrica {
 		return vc;
 	}
 	
-
 }
 	
 
