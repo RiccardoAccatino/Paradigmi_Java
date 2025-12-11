@@ -70,5 +70,16 @@ public class Giudice {
 		return counterMaggots;
 		
 	}
+	public static String genTarget() {
+		int index = (int) (Math.random() * LUNGHEZZA);
+		String target= String.valueOf(index);
+		if(valida(target)==true)
+		{
+			return target;
+		}else
+		{
+			return genTarget();
+		}
+	}
 
 }
