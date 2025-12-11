@@ -101,9 +101,10 @@ public class Giudice {
 		}else
 		{
 			ArrayList<String> listStr=comb(n-1, chars);
-			for(String str : listStr)
-			{
-				temp.add(str+chars);
+			for(String str : listStr) {
+			    for(char c : chars) { // Devi iterare sui caratteri
+			        temp.add(str + c);
+			    }
 			}
 			return temp;
 		}
