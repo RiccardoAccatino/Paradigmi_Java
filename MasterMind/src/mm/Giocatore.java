@@ -23,15 +23,13 @@ public abstract class Giocatore {
 		return target;
 	}
 	
-	public boolean addTentativo(String guess,int bulls,int maggots)
-	{
-		Tentativo s= new Tentativo(guess, maggots, maggots);
-		if(Giudice.valida(s.getGuess())==true);
-		{
-			tentativi.add(s);
-			return true;
-		}
-		
+	public boolean addTentativo(String guess, int bulls, int maggots) {
+	    Tentativo s = new Tentativo(guess, bulls, maggots);
+	    if (Giudice.valida(s.getGuess()) == true) {
+	        tentativi.add(s);
+	        return true;
+	    }
+	    return false; 
 	}
 	
 	public String stringaTentativi()

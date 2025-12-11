@@ -1,5 +1,7 @@
 package mm;
 
+import java.util.ArrayList;
+
 public class Giudice {
 	public static final int LUNGHEZZA = 4;
 	public static final char[] CHARS = {'0','1','2','3','4','5','6','7','8','9'};
@@ -74,15 +76,49 @@ public class Giudice {
 		
 	}
 	public static String genTarget() {
-		int index = (int) (Math.random() * LUNGHEZZA);
-		String target= String.valueOf(index);
-		if(valida(target)==true)
-		{
-			return target;
-		}else
-		{
-			return genTarget();
-		}
+	    String target = "";
+	    // Continua finché non abbiamo 4 caratteri
+	    while (target.length() < LUNGHEZZA) {
+	        // Scegli un indice a caso dall'array CHARS (lunghezza 10, non 4!)
+	        int index = (int) (Math.random() * CHARS.length);
+	        char c = CHARS[index];
+	        // Aggiungi solo se il carattere non è già presente (per evitare duplicati)
+	        if (target.indexOf(c) == -1) {
+	            target += c;
+	        }
+	    }
+	    return target;
 	}
 
+	public static ArrayList<String> comb(int n,char[] chars)
+	{
+		ArrayList<String> temp = new ArrayList<String>();
+		if(n<=0)
+		{
+			ArrayList<String> res= new ArrayList<String>();
+			res.add("");
+			return res;
+		}else
+		{
+			ArrayList<String> listStr=comb(n-1, chars);
+			for(String str : listStr)
+			{
+				temp.add(str+chars);
+			}
+			return temp;
+		}
+	}
+	
+	public static ArrayList<String> combValide(ArrayList<String> strs)
+	{
+		ArrayList<String> valide= new ArrayList<String>();
+		for(String str : strs)
+		{
+			if(Giudice.valida(str)==true)
+			{
+				valide.add(str);
+			}
+		}
+		return valide;
+	}
 }
