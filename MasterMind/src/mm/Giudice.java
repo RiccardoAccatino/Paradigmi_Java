@@ -20,6 +20,14 @@ public class Giudice {
 			}
 			if(cc==LUNGHEZZA)
 				{
+				for(int i=0;i<LUNGHEZZA;i++)
+				{
+					for(int j=i+1;j<LUNGHEZZA;j++)
+					{
+						if(str.charAt(i)==str.charAt(j))
+							return false;
+					}
+				}
 				return true;
 				}
 				else
