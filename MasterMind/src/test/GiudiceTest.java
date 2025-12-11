@@ -6,78 +6,89 @@ import mm.Giudice;
 
 class GiudiceTest {
 
-    // --- Test per il metodo valida() ---
+    // -----------------------------------------------------------
+    // TEST METODO VALIDA (Regole: 4 cifre, 0-9, NO duplicati)
+    // -----------------------------------------------------------
 
     @Test
     void testValidaCorretta() {
-        // Stringhe valide: lunghezza 4, solo numeri, NESSUN duplicato
-        assertTrue(Giudice.valida("1234"), "Dovrebbe accettare una combinazione valida senza duplicati");
-        assertTrue(Giudice.valida("9876"), "Dovrebbe accettare cifre alte valide senza duplicati");
-        assertTrue(Giudice.valida("0123"), "Dovrebbe accettare lo 0 se univoco");
+        // Casi validi ideali
+        assertTrue(Giudice.valida("1234"), "Deve accettare una stringa valida (es. 1234)");
+        assertTrue(Giudice.valida("0123"), "Deve accettare lo 0 come cifra valida");
+        assertTrue(Giudice.valida("9876"), "Deve accettare cifre alte");
     }
 
     @Test
     void testValidaConDuplicati() {
-        // Ora queste devono restituire FALSE perché il nuovo codice controlla i duplicati
-        assertFalse(Giudice.valida("1123"), "Non dovrebbe accettare numeri ripetuti all'inizio");
-        assertFalse(Giudice.valida("1223"), "Non dovrebbe accettare numeri ripetuti nel mezzo");
-        assertFalse(Giudice.valida("1231"), "Non dovrebbe accettare numeri ripetuti distanti");
-        assertFalse(Giudice.valida("0000"), "Non dovrebbe accettare cifre tutte uguali");
+        // Casi con numeri ripetuti (DEVONO FALLIRE secondo la tua nuova logica)
+        assertFalse(Giudice.valida("1123"), "Non deve accettare numeri duplicati all'inizio");
+        assertFalse(Giudice.valida("1223"), "Non deve accettare numeri duplicati nel mezzo");
+        assertFalse(Giudice.valida("1231"), "Non deve accettare numeri duplicati distanti");
+        assertFalse(Giudice.valida("0000"), "Non deve accettare cifre tutte uguali");
     }
 
     @Test
     void testValidaLunghezzaErrata() {
-        assertFalse(Giudice.valida("123"), "Non dovrebbe accettare stringhe troppo corte");
-        assertFalse(Giudice.valida("12345"), "Non dovrebbe accettare stringhe troppo lunghe");
-        assertFalse(Giudice.valida(""), "Non dovrebbe accettare stringhe vuote");
+        // Lunghezza diversa da 4
+        assertFalse(Giudice.valida("123"), "Non deve accettare stringhe troppo corte (3 cifre)");
+        assertFalse(Giudice.valida("12345"), "Non deve accettare stringhe troppo lunghe (5 cifre)");
+        assertFalse(Giudice.valida(""), "Non deve accettare stringhe vuote");
+        assertFalse(Giudice.valida(null), "Non deve accettare null (se gestito, altrimenti rimuovi questo assert)");
     }
 
     @Test
-    void testValidaCaratteriNonValidi() {
-        assertFalse(Giudice.valida("123a"), "Non dovrebbe accettare lettere");
-        assertFalse(Giudice.valida("12 3"), "Non dovrebbe accettare spazi");
-        assertFalse(Giudice.valida("123."), "Non dovrebbe accettare simboli");
+    void testValidaCaratteriNonNumerici() {
+        // Caratteri non validi
+        assertFalse(Giudice.valida("123a"), "Non deve accettare lettere");
+        assertFalse(Giudice.valida("12 3"), "Non deve accettare spazi vuoti");
+        assertFalse(Giudice.valida("12-3"), "Non deve accettare simboli speciali");
     }
 
-    // --- Test per il metodo numMaggots() (Posizione e numero corretti) ---
+    // -----------------------------------------------------------
+    // TEST METODO NUM MAGGOTS (Numero giusto, Posto giusto)
+    // -----------------------------------------------------------
 
     @Test
     void testNumMaggots() {
-        // Target e Guess identici
-        assertEquals(4, Giudice.numMaggots("1234", "1234"), "Dovrebbe trovare 4 Maggots");
-        
-        // Nessun match
+        // Caso: Tutto corretto
+        assertEquals(4, Giudice.numMaggots("1234", "1234"), "Dovrebbe trovare 4 Maggots (vittoria)");
+
+        // Caso: Nessuna corrispondenza
         assertEquals(0, Giudice.numMaggots("1234", "5678"), "Dovrebbe trovare 0 Maggots");
-        
-        // Match numeri ma posizioni sbagliate (quindi 0 Maggots)
-        assertEquals(0, Giudice.numMaggots("1234", "4321"), "Dovrebbe trovare 0 Maggots se le posizioni sono diverse");
-        
-        // Parziale
-        assertEquals(2, Giudice.numMaggots("1234", "1994"), "Dovrebbe trovare 2 Maggots (prima e ultima cifra)");
+
+        // Caso: Numeri giusti ma posti sbagliati (0 Maggots, sarebbero Bulls)
+        assertEquals(0, Giudice.numMaggots("1234", "4321"), "Non deve contare Maggots se la posizione è errata");
+
+        // Caso: Parziale (1° e 3° corretti)
+        // Guess: 1 5 3 8
+        // Target: 1 9 3 4
+        assertEquals(2, Giudice.numMaggots("1538", "1934"), "Dovrebbe trovare 2 Maggots");
     }
 
-    // --- Test per il metodo numBulls() (Numero corretto, posizione errata) ---
-    // Nota: I test assumono input validi (senza duplicati) come garantito da valida()
+    // -----------------------------------------------------------
+    // TEST METODO NUM BULLS (Numero giusto, Posto sbagliato)
+    // -----------------------------------------------------------
 
     @Test
     void testNumBulls() {
-        // Tutti Bulls: numeri corretti ma posizioni tutte scambiate
-        // Target: 1234, Guess: 4321
-        assertEquals(4, Giudice.numBulls("4321", "1234"), "Dovrebbe trovare 4 Bulls");
-        
-        // Misti (Bulls e Maggots)
+        // Caso: Tutto scambiato (4 Bulls)
+        // Guess: 4321
         // Target: 1234
-        // Guess:  1243 
+        assertEquals(4, Giudice.numBulls("4321", "1234"), "Dovrebbe trovare 4 Bulls (tutti presenti ma pos errata)");
+
+        // Caso: Misto (Alcuni al posto giusto, altri no)
+        // Target: 1234
+        // Guess:  1243
         // '1' e '2' sono Maggots (pos giusta) -> NON sono Bulls
         // '4' e '3' sono scambiati -> SONO Bulls
-        assertEquals(2, Giudice.numBulls("1243", "1234"), "Dovrebbe trovare 2 Bulls (quelli scambiati)");
-        
-        // Nessun Match
-        assertEquals(0, Giudice.numBulls("1234", "5678"), "Non dovrebbe trovare Bulls se i numeri non ci sono");
-        
-        // Caso singolo
+        assertEquals(2, Giudice.numBulls("1243", "1234"), "Deve contare solo i numeri fuori posto come Bulls");
+
+        // Caso: Solo 1 Bull
         // Target: 1234
-        // Guess:  5618 (C'è l'1 ma è nel posto sbagliato)
+        // Guess:  5618 (C'è l'1 ma in posizione 2 invece di 0)
         assertEquals(1, Giudice.numBulls("5618", "1234"), "Dovrebbe trovare 1 Bull");
+        
+        // Caso: Nessun Bull
+        assertEquals(0, Giudice.numBulls("1234", "5678"), "Nessun Bull se i numeri non ci sono");
     }
 }

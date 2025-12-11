@@ -7,6 +7,9 @@ public class Giudice {
 	
 	public static boolean valida(String str)
 	{
+		if (str == null) {
+            return false;
+        }
 		int cc=0;
 		if(str.length()==LUNGHEZZA)
 		{
