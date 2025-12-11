@@ -3,66 +3,109 @@ package rubrica;
 import java.util.ArrayList;
 
 public class Rubrica {
-    // L'ArrayList deve contenere oggetti Contatto [cite: 13, 72]
     private ArrayList<Contatto> rubrica; 
     
     private final int maxdim;
-    private final String nome; // Anche 'nome' dovrebbe essere final secondo il testo [cite: 75]
+    private final String nome;
     
-    // Queste devono essere STATIC 
+   
     private static int numRubriche = 0;
-    public static final int DEF_MAXDIM = 5; // Anche FINAL oltre che static
+    public static final int DEF_MAXDIM = 5; 
     
     public Rubrica(String nome, int maxdim) {
         this.nome = nome;
         this.maxdim = maxdim;
-        // Bisogna inizializzare la lista, altrimenti è null!
         this.rubrica = new ArrayList<Contatto>(); 
-        numRubriche++; // Incrementa il contatore condiviso [cite: 89]
+        numRubriche++;
     }
     
     public Rubrica(String nome) {
-        // Usa 'this' per chiamare l'altro costruttore ed evitare codice duplicato [cite: 90]
         this(nome, DEF_MAXDIM);
     }
     
-    // --- METODI AGGIUNGI ---
-    
-    // Questo è il metodo "MASTER" che contiene tutta la logica 
     public int aggiungi(Contatto c) {
-        // 1. Controllo dimensione [cite: 108]
         if (rubrica.size() >= maxdim) {
-            return -1; // Codice di errore: Rubrica piena
+            return -1; 
         }
         
-        // 2. Controllo duplicati tramite email [cite: 108]
-        // Non possiamo usare .contains(String) su una lista di Contatti.
         for (Contatto esistente : rubrica) {
-            // Usiamo matchEmail o getEmail per confrontare
             if (esistente.getEmail().equals(c.getEmail())) {
-                return -2; // Codice di errore: Contatto già presente
+                return -2; 
             }
         }
         
-        // Se tutto va bene, aggiungiamo
         rubrica.add(c);
-        return 0; // Successo
+        return 0; 
     }
     
-    // Gli altri metodi DELEGANO il lavoro al metodo master
     public int aggiungi(String email, String nome) {
         Contatto nuovo = new Contatto(email, nome);
-        return this.aggiungi(nuovo); // Chiama il metodo sopra
+        return this.aggiungi(nuovo);
     }
     
     public int aggiungi(String email) {
         Contatto nuovo = new Contatto(email);
-        return this.aggiungi(nuovo); // Chiama il metodo sopra
+        return this.aggiungi(nuovo); 
     }
     
-    // Getter per numRubriche (richiesto dal PDF [cite: 106])
     public static int numRubriche() {
         return numRubriche;
     }
     
+    public ArrayList<Contatto> cercaPerNome(String s)
+    {
+    	ArrayList<Contatto> sup= new ArrayList<Contatto>();
+    	for(Contatto esistente : rubrica)
+    	{
+    		if(esistente.matchNome(s)==true)
+    		{
+    			sup.add(esistente);
+    		}
+    	}
+    	return sup;
+    }
+    
+    public ArrayList<Contatto> cercaPerEmail(String s)
+    {
+    	ArrayList<Contatto> sup= new ArrayList<Contatto>();
+    	for(Contatto esistente : rubrica)
+    	{
+    		if(esistente.matchEmail(s)==true)
+    		{
+    			sup.add(esistente);
+    		}
+    	}
+    	return sup;
+    	
+    }
+    public boolean eliminaPerNome(String s)
+    {
+    	ArrayList<Contatto> sup= cercaPerNome(s);
+    	if(sup.size()==0)
+    	{
+    		return false;
+    	}else
+    	{
+    		rubrica.removeIf(c -> sup.contains(c));
+    		return true;
+    	}
+    }
+    
+    public boolean eliminaPerEmail(String s)
+    {
+    	ArrayList<Contatto> sup= cercaPerEmail(s);
+    	if(sup.size()==0)
+    	{
+    		return false;
+    	}else
+    	{
+    		rubrica.removeIf(c -> sup.contains(c));
+    		return true;
+    	}
+    }
+    public String toString()
+    {
+    	return rubrica.toString();
+    }
+
 }
